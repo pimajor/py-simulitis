@@ -1,7 +1,7 @@
 # py-simulitis
 Python Virus Spread Simulator for Kids
 
-Works well in XCode, standard python libraries
+Works well in Visual Studio Code, standard python libraries
 
 
 Code inspired by

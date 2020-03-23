@@ -10,6 +10,7 @@ and by
 https://www.washingtonpost.com/graphics/2020/world/corona-simulator/
 
 TODOS:
-1. show live statistics
-2. implement virus vectors with no symptoms
-3. implement infection via trails 
+1. Show live statistics
+2. Implement virus vectors with no symptoms
+3. Implement infection via trails 
+4. Refactor parameters to simplify testing different outcomes

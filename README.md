@@ -14,3 +14,6 @@ TODOS:
 2. Implement virus vectors with no symptoms
 3. Implement infection via trails 
 4. Refactor parameters to simplify testing different outcomes
+
+![Alt text](images/distribution.png?raw=true "Distribution")
+![Alt text](images/simulation.png?raw=true "Simulation")

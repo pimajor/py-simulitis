@@ -45,8 +45,9 @@ class Person(turtle.Turtle):
         self.state = -1 # cannot get sick again
         self.color("green")
 
-    def set_sick(self):       
-        if self.state == 0: # if has not been sick, then get sick
+    def set_sick(self):      
+        """ sets the Person to sick and Returns True is infected for the first time """ 
+        if self.state == 0:
             self.state = 1
             self.color("red")
             return True
@@ -71,9 +72,18 @@ class Person(turtle.Turtle):
         return self.state
 
     def is_sick(self):
+        """ Returns True if the Person is currently sick """
         return self.state > 0
 
+    def has_reocovered(self):
+        """ Returns True if the Person has been infected and recovered """
+        return self.state < 0
 
+
+    def is_clean(self):
+        """ Returns True if the Person has not been infected """
+        return self.state == 0
 
     def set_infected(self):
+        """ Increases the counter of Persons this Person has infected """
         self.has_infected +=1

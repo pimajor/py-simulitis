@@ -1,8 +1,12 @@
 import Person
 import turtle
+import json
 
 import numpy as np
 import matplotlib.pyplot as plt
+
+with open('config.json') as f:
+  config = json.load(f)
 
 wn = turtle.Screen()
 wn.bgcolor("white")
@@ -13,9 +17,7 @@ file_name = "simulitis.csv" # will be used to log the statistics
 balls = [] 
 width =  .8 #this is the default, TODO CALCULATE DYNAMICALLY
 
-population_size = 100
-
-for _ in range(population_size):
+for _ in range(config["population_size"]):
     balls.append(Person.Person())
 
 balls[0].set_sick()

@@ -13,7 +13,8 @@ TODOS:
 1. Show live statistics
 2. Implement virus vectors with no symptoms
 3. Implement infection via trails 
-4. Refactor parameters to simplify testing different outcomes
+4. Implement sick persons not moving
+5. Implement confinement 
 
 ![Alt text](images/distribution.png?raw=true "Distribution")
 ![Alt text](images/simulation.png?raw=true "Simulation")

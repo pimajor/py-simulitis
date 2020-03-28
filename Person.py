@@ -1,10 +1,16 @@
 import turtle
 import random
+import json
 
-edge = 350
-recovery_period = 1000 # ticks
-collision_distance = 3 # if a person gets into a square of 2 * collision_distance, it gets infected, 
+with open('config.json') as f:
+  config = json.load(f)
+
+
+edge = config["window_size"]
+recovery_period = config["recovery_time"] # ticks
+collision_distance =  config["collision_distance"] # if a person gets into a square of 2 * collision_distance, it gets infected, 
 # todo instead of distance, use trail where a sick person has gone
+max_initial_speed = config["max_initial_speed"]
 
 class Person(turtle.Turtle):
     state = 0 # zero means has not been sick, positive is the number of ticks while being sick, negative is recovered
@@ -17,8 +23,8 @@ class Person(turtle.Turtle):
         self.speed(0)
         x = random.randint(-edge+1,edge-1)
         y = random.randint(-edge+1,edge-1)
-        dx = random.randint(-3,3)
-        dy = random.randint(-3,3)
+        dx = random.randint(-max_initial_speed,max_initial_speed)
+        dy = random.randint(-max_initial_speed,max_initial_speed)
         self.goto(x,y)
         self.dy = dx 
         self.dx = dy 

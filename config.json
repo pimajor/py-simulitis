@@ -1,0 +1,8 @@
+{
+  "population_size": 100, 
+  "max_initial_speed" : 3,
+  "window_size" : 350,
+  "recovery_time" : 1000,
+  "incubation_time" : 100,
+  "collision_distance" : 3
+}

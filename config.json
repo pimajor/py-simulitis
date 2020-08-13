@@ -3,6 +3,11 @@
   "max_initial_speed" : 3,
   "window_size" : 350,
   "recovery_time" : 1000,
-  "incubation_time" : 100,
-  "collision_distance" : 3
+  "incubation_time" : 1000,
+  "collision_distance" : 5,
+  "incubation_time_percent": 0.2,
+  "confinment_distance": 10,
+  "confinment_threshold": 0.1,
+  "recovered_rate_perc":30.0,
+  "infected_rate_perc":10.0
 }

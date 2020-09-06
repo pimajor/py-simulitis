@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 import matplotlib.dates as mdates
 import datetime as dt
+import pandas as pd
+
+word_pop_file = ".\\data\\world_population_2020.csv"
 
 countries  = []
 
@@ -25,7 +28,10 @@ death_subtitle = "Death cases"
 death.append(death_file)
 death.append(death_subtitle)
 
-
+world_pop = pd.read_csv(word_pop_file)
+print(world_pop.info())
+col_country_name = world_pop.columns[0]
+col_country_pop = world_pop.columns[1]
 case = confirmed
 
 def main():
@@ -44,12 +50,13 @@ def main():
     groups= []
 
     groups.append(["France", "Germany", "Italy", "Spain","Portugal", "United Kingdom"])
-    groups.append(["Mexico", "Brazil", "US", "Russia","India"])
+    groups.append(["Mexico", "Brazil", "US", "Russia", "India"])
     groups.append(["Belgium", "Netherlands", "Sweden", "Switzerland"])
+    groups.append(["Morocco", "Algeria", "Senegal", "Tunisia"])
+    groups.append(["Finland","Iceland","Denmark", "Sweden", "Norway" ])
+    groups.append([ "Vietnam", "Singapore", "Japan","Philippines"])
     
-    groups.append(["Finland","Norway","Denmark","Sweden", "Iceland"])
-    groups.append([ "Vietnam", "Singapore", "Taiwan*", "Japan","Hong Kong-China","Philippines"])
-    
+
     print("Last report ", time[-1])
     print("total ",case[1]," count in ", country," : " , state[country]["values"][-1])
     print("new cases for  ",case[1]," in ", country," : " , speed[country]["values"][-1])
@@ -58,7 +65,7 @@ def main():
     # plotAgainstTime(country,acc,time,10,False)
     # plotAgainstTime(country,state,time,1, True)
     for countries in groups:
-        plotCountries(countries,speed,time,14,True)
+        plotCountries(countries,speed,time,14,True,relative=True)
     
 
     # plot(country,speed,state,7)
@@ -77,13 +84,21 @@ def average(array,window_size):
     return avg
 
 
-def plotCountries(countries,dicto,time,window_size,log):
+def plotCountries(countries,dicto,time,window_size,log,relative):
     title =""
     line, ax = plt.subplots(figsize=(10, 6))
     for country in countries:
         data = dicto[country]["values"]
+        if relative:
+            c_pop = world_pop.loc[world_pop[col_country_name] == country]
+            if c_pop.shape[0]==0:
+                print(country + " has no entry in world pop")
+            else: 
+                pop = c_pop.iloc[0][col_country_pop]
+                data /=(pop/100000)
+
         data_avg = average(data,window_size) 
-        title = title + " vs. " + country
+        title = country if title =="" else title + " vs. " + country
         
         if log:
            
@@ -103,7 +118,7 @@ def plotCountries(countries,dicto,time,window_size,log):
             line.set_label(country)
             
     plt.legend(countries)
-    plt.title(title +" \n" + case[1] + " " + dicto[country]["unit"])
+    plt.title(title +" \n" + case[1] + " " + (dicto[country]["unit"] + "/100000 inhabitants" if relative else dicto[country]["unit"] ))
     plt.xlabel("Time")
     plt.xticks(rotation=90)    
     plt.show()

@@ -6,7 +6,7 @@ import matplotlib.dates as mdates
 import datetime as dt
 import pandas as pd
 
-word_pop_file = ".\\data\\world_population_2020.csv"
+word_pop_file = "C:\\work\\py-simulitis\\data\\world_population_2020.csv"
 
 countries  = []
 
@@ -32,7 +32,64 @@ world_pop = pd.read_csv(word_pop_file)
 print(world_pop.info())
 col_country_name = world_pop.columns[0]
 col_country_pop = world_pop.columns[1]
+
+# change the case here
 case = confirmed
+cases = [confirmed[0],death[0]]
+
+
+westernEurope =["France", "Germany", "Italy", "Spain","Portugal", "United Kingdom"] 
+bigCountries = ["Mexico", "Brazil", "US", "Russia", "India"]
+nordicCountries = ["Finland","Iceland","Denmark", "Sweden", "Norway" ]
+smallNorthEurope = ["Belgium", "Netherlands", "Sweden", "Switzerland", "Austria"]
+asia=[ "Vietnam", "Singapore", "Japan","Philippines"]
+eastern_europe = ["Poland","Bosnia and Herzegovina","Croatia", "Serbia", "Slovenia","Ukraine", "Romania", "Bulgaria" ,"Slovakia","Hungary"]#, "Czechia"]
+# eastern_europe = ["Czechia"]
+   
+def getPopulationCount(country,relative=True):
+    pop = 1
+    df = world_pop.loc[world_pop[col_country_name].str.contains(country)]
+    if relative:
+        c_pop = world_pop.loc[world_pop[col_country_name] == country]
+        if c_pop.shape[0]==0:
+            print(country + " has no entry in world pop")
+        else: 
+            pop = c_pop.iloc[0][col_country_pop]
+    return pop
+
+
+
+def scatter(data,countries,relative = False):
+    daataa = []
+
+    daataa.append(getMatrix(getMatrixFromCSV(data[0])))
+    daataa.append(getMatrix(getMatrixFromCSV(data[1])))
+
+    datax, datay,dataz =[],[],[]
+   
+    for country in daataa[0]:
+        if country in countries:
+            datax.append( daataa[0][country]["values"][-1]/getPopulationCount(country,relative))
+            dataz.append(country)
+       
+    for country in daataa[1]:
+        if country in countries:
+            datay.append( daataa[1][country]["values"][-1]/getPopulationCount(country,relative))
+    fig, ax = plt.subplots()
+    ax.scatter(datax, datay)
+
+    for i, txt in enumerate(dataz):
+        ax.annotate(txt, (datax[i], datay[i]))
+
+    if data[0] == confirmed[0]:
+          plt.xlabel("Confirmed")
+    if data[1] == confirmed[0]:
+          plt.xlabel("Confirmed")
+    elif data[1] == death[0]:
+          plt.ylabel("Death")
+    plt.show()   
+
+    return 0
 
 def main():
    
@@ -40,21 +97,30 @@ def main():
     time = getTimeLine(mat)
     state = getMatrix(mat)
 
+  
+    scatter([confirmed[0],death[0]],eastern_europe)
+    scatter([confirmed[0],death[0]],westernEurope)
+    scatter([confirmed[0],death[0]],bigCountries)
+    scatter([confirmed[0],death[0]],nordicCountries)
+    scatter([confirmed[0],death[0]],smallNorthEurope)
+    scatter([confirmed[0],death[0]],asia)
+
     # showCountries(state)
 
     speed = getSpeedMatrix(mat)
     acc = getAccelerationMatrix(speed)  
 
-    country = "France"
+    country = "Norway"
 
     groups= []
 
-    groups.append(["France", "Germany", "Italy", "Spain","Portugal", "United Kingdom"])
-    groups.append(["Mexico", "Brazil", "US", "Russia", "India"])
-    groups.append(["Belgium", "Netherlands", "Sweden", "Switzerland"])
+    groups.append(eastern_europe) 
+    groups.append(westernEurope)
+    groups.append(bigCountries)
+    groups.append(smallNorthEurope)
     groups.append(["Morocco", "Algeria", "Senegal", "Tunisia"])
-    groups.append(["Finland","Iceland","Denmark", "Sweden", "Norway" ])
-    groups.append([ "Vietnam", "Singapore", "Japan","Philippines"])
+    groups.append(nordicCountries)
+    groups.append(asia) 
     
 
     print("Last report ", time[-1])
@@ -65,7 +131,7 @@ def main():
     # plotAgainstTime(country,acc,time,10,False)
     # plotAgainstTime(country,state,time,1, True)
     for countries in groups:
-        plotCountries(countries,speed,time,14,True,relative=True)
+        plotCountries(countries,speed,time,14,log=True,relative=True)
     
 
     # plot(country,speed,state,7)
@@ -89,22 +155,13 @@ def plotCountries(countries,dicto,time,window_size,log,relative):
     line, ax = plt.subplots(figsize=(10, 6))
     for country in countries:
         data = dicto[country]["values"]
-        if relative:
-            c_pop = world_pop.loc[world_pop[col_country_name] == country]
-            if c_pop.shape[0]==0:
-                print(country + " has no entry in world pop")
-            else: 
-                pop = c_pop.iloc[0][col_country_pop]
-                data /=(pop/100000)
+        pop_count =getPopulationCount(country,relative) /100000
+        data = [x / pop_count for x in data]
 
         data_avg = average(data,window_size) 
         title = country if title =="" else title + " vs. " + country
         
         if log:
-           
-            # line = plt.semilogy(time,data_avg)
-            #  
-
             ax.semilogy(time,data_avg)
             date_form = DateFormatter("%d-%m-%y")
             ax.xaxis.set_major_formatter(date_form)

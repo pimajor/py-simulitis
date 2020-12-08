@@ -28,7 +28,7 @@ death_subtitle = "Death cases"
 death.append(death_file)
 death.append(death_subtitle)
 
-world_pop = pd.read_csv(word_pop_file)
+world_pop = pd.read_csv(word_pop_file,sep=";")
 print(world_pop.info())
 col_country_name = world_pop.columns[0]
 col_country_pop = world_pop.columns[1]
@@ -42,7 +42,7 @@ westernEurope =["France", "Germany", "Italy", "Spain","Portugal", "United Kingdo
 bigCountries = ["Mexico", "Brazil", "US", "Russia", "India"]
 nordicCountries = ["Finland","Iceland","Denmark", "Sweden", "Norway" ]
 smallNorthEurope = ["Belgium", "Netherlands", "Sweden", "Switzerland", "Austria"]
-asia=[ "Vietnam", "Singapore", "Japan","Philippines"]
+asia=[ "Vietnam", "Singapore", "Japan","Philippines","Taiwan*","Korea, South"]
 eastern_europe = ["Poland","Bosnia and Herzegovina","Croatia", "Serbia", "Slovenia","Ukraine", "Romania", "Bulgaria" ,"Slovakia","Hungary"]#, "Czechia"]
 # eastern_europe = ["Czechia"]
    
@@ -97,7 +97,6 @@ def main():
     time = getTimeLine(mat)
     state = getMatrix(mat)
 
-  
     scatter([confirmed[0],death[0]],eastern_europe)
     scatter([confirmed[0],death[0]],westernEurope)
     scatter([confirmed[0],death[0]],bigCountries)
